@@ -50,6 +50,3 @@ cmake-build-debug/
 *.onnx
 *.cfg
 *.names
-
-# vscode stuff
-*.vscode
