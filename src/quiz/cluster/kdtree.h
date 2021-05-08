@@ -78,9 +78,9 @@ struct KdTree
 					ids.push_back(node->id);
 			}
 			// check left or right
-			if((target[depth % 2] - distanceTol) < node->point[depth % 2])
+			if((target[depth % 2] - distanceTol) <= node->point[depth % 2])
 				searchRecursively(target, node->left, depth+1, distanceTol, ids);
-			if((target[depth % 2] + distanceTol) > node->point[depth % 2])
+			if((target[depth % 2] + distanceTol) >= node->point[depth % 2])
 				searchRecursively(target, node->right, depth+1, distanceTol, ids);
 		}
 	}
