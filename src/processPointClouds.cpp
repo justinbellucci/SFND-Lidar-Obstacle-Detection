@@ -162,6 +162,21 @@ Box ProcessPointClouds<PointT>::BoundingBox(typename pcl::PointCloud<PointT>::Pt
     return box;
 }
 
+template<typename PointT>
+BoxQ ProcessPointClouds<PointT>::BoundingBoxQ(typename pcl::PointCloud<PointT>::Ptr cluster)
+{
+    // Find bounding box using PCA (principle component analysis)
+    /*
+        1. compute the centroid (c0, c1, c2) and the normalized covariance
+        2. compute the eigenvectors e0, e1, e2
+        3. move the points in that RF
+        4. compute the max, min and center of the diagonal
+        5. apply transformation to box centered at the origin
+            rotation = (e0, e1, e0Xe1)
+            translation = rotation * center_diag + (c0, c1, c2)
+    */
+   
+}
 
 template<typename PointT>
 void ProcessPointClouds<PointT>::savePcd(typename pcl::PointCloud<PointT>::Ptr cloud, std::string file)
