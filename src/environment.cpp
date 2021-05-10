@@ -44,8 +44,10 @@ void cityBlock(pcl::visualization::PCLVisualizer::Ptr& viewer)
     ProcessPointClouds<pcl::PointXYZI>* pointProcessorI = new ProcessPointClouds<pcl::PointXYZI>();
     // load point cloud data
     pcl::PointCloud<pcl::PointXYZI>::Ptr inputCloud = pointProcessorI->loadPcd("/Users/justinbellucci/GitHub/SFND-Lidar-Obstacle-Detection/src/sensors/data/pcd/data_1/0000000000.pcd");
-    renderPointCloud(viewer, inputCloud, "City block");
-    
+    // filter cloud
+    pcl::PointCloud<pcl::PointXYZI>::Ptr filterCloud = pointProcessorI->FilterCloud(inputCloud, 0.5, Eigen::Vector4f(-10, -10, -10, 1), Eigen::Vector4f(10, 10, 10, 1));
+    // renderPointCloud(viewer, inputCloud, "City block");
+    renderPointCloud(viewer, filterCloud, "filterCloud");
 }
 
 void simpleHighway(pcl::visualization::PCLVisualizer::Ptr& viewer)
