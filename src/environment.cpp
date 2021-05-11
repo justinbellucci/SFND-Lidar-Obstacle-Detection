@@ -45,10 +45,17 @@ void cityBlock(pcl::visualization::PCLVisualizer::Ptr& viewer)
     // load point cloud data
     pcl::PointCloud<pcl::PointXYZI>::Ptr inputCloud = pointProcessorI->loadPcd("/Users/justinbellucci/GitHub/SFND-Lidar-Obstacle-Detection/src/sensors/data/pcd/data_1/0000000000.pcd");
     // filter cloud
-    pcl::PointCloud<pcl::PointXYZI>::Ptr filterCloud = pointProcessorI->FilterCloud(inputCloud, 0.5, Eigen::Vector4f(-10, -10, -10, 1), Eigen::Vector4f(10, 10, 10, 1));
+    pcl::PointCloud<pcl::PointXYZI>::Ptr filterCloud = pointProcessorI->FilterCloud(inputCloud, 0.2, Eigen::Vector4f(-20, -6, -10, 1), Eigen::Vector4f(20, 6, 10, 1));
+    
+    // segment cloud into road and obstacles
+    std::pair<pcl::PointCloud<pcl::PointXYZI>::Ptr, pcl::PointCloud<pcl::PointXYZI>::Ptr> segmentedCloudI = pointProcessorI->SegmentPlane(filterCloud, 100, 0.2);
+    
+    // render segmented cloud
     // renderPointCloud(viewer, inputCloud, "City block");
-    renderPointCloud(viewer, filterCloud, "filterCloud");
-}
+    // renderPointCloud(viewer, filterCloud, "filterCloud");
+    renderPointCloud(viewer, segmentedCloudI.first, "Obstacles", Color(1,0,0));
+    renderPointCloud(viewer, segmentedCloudI.second, "Road", Color(0,1,0));
+}   
 
 void simpleHighway(pcl::visualization::PCLVisualizer::Ptr& viewer)
 {
