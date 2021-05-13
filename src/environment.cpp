@@ -34,16 +34,16 @@ std::vector<Car> initHighway(bool renderScene, pcl::visualization::PCLVisualizer
     return cars;
 }
 
-void cityBlock(pcl::visualization::PCLVisualizer::Ptr& viewer)
+void cityBlock(pcl::visualization::PCLVisualizer::Ptr& viewer, ProcessPointClouds<pcl::PointXYZI>* pointProcessorI, const pcl::PointCloud<pcl::PointXYZI>::Ptr& inputCloud)
 {
     // ---------------------------------------------------
     // ------ Open 3D viewer and display city block ------
     // ---------------------------------------------------
 
     // create point cloud process with intensity data on the heap
-    ProcessPointClouds<pcl::PointXYZI>* pointProcessorI = new ProcessPointClouds<pcl::PointXYZI>();
+    // ProcessPointClouds<pcl::PointXYZI>* pointProcessorI = new ProcessPointClouds<pcl::PointXYZI>();
     // load point cloud data
-    pcl::PointCloud<pcl::PointXYZI>::Ptr inputCloud = pointProcessorI->loadPcd("/Users/justinbellucci/GitHub/SFND-Lidar-Obstacle-Detection/src/sensors/data/pcd/data_1/0000000000.pcd");
+    // pcl::PointCloud<pcl::PointXYZI>::Ptr inputCloud = pointProcessorI->loadPcd("/Users/justinbellucci/GitHub/SFND-Lidar-Obstacle-Detection/src/sensors/data/pcd/data_1/0000000000.pcd");
     // filter cloud
     pcl::PointCloud<pcl::PointXYZI>::Ptr filterCloud = pointProcessorI->FilterCloud(inputCloud, 0.2, Eigen::Vector4f(-20, -6, -10, 1), Eigen::Vector4f(20, 6, 10, 1));
     
@@ -66,7 +66,7 @@ void cityBlock(pcl::visualization::PCLVisualizer::Ptr& viewer)
         pointProcessorI->numPoints(clusterI);
         renderPointCloud(viewer, clusterI, "Obstacle cloud_"+std::to_string(clusterID), colors[clusterID%colors.size()]);
         Box box = pointProcessorI->BoundingBox(clusterI);
-        renderBox(viewer, box, clusterID, colors[clusterID%colors.size()], 0.3);
+        renderBox(viewer, box, clusterID, Color(1,1,1), 0.3);
         ++clusterID;
     }
 }   
@@ -80,9 +80,9 @@ void simpleHighway(pcl::visualization::PCLVisualizer::Ptr& viewer)
     bool renderScene = false;
     std::vector<Car> cars = initHighway(renderScene, viewer);
     
-    // TODO:: Create lidar sensor 
+    // Create lidar sensor 
     Lidar* lidar = new Lidar(cars, 0);
-    // TODO:: Create point processor
+    // Create point processor
     pcl::PointCloud<pcl::PointXYZ>::Ptr inputCloud = lidar->scan();
     // renderRays(viewer, lidar->position, inputCloud);
     // renderPointCloud(viewer, cloud, "Ray Viewer");
@@ -142,11 +142,31 @@ int main (int argc, char** argv)
     pcl::visualization::PCLVisualizer::Ptr viewer (new pcl::visualization::PCLVisualizer ("3D Viewer"));
     CameraAngle setAngle = XY;
     initCamera(setAngle, viewer);
+
+    // create point processor and respective pointer
+    ProcessPointClouds<pcl::PointXYZI>* pointProcessorI = new ProcessPointClouds<pcl::PointXYZI>();
+    // load data to stream
+    std::vector<boost::filesystem::path> stream = pointProcessorI->streamPcd("/Users/justinbellucci/GitHub/SFND-Lidar-Obstacle-Detection/src/sensors/data/pcd/data_1");
+    auto streamIterator = stream.begin();
+    pcl::PointCloud<pcl::PointXYZI>::Ptr inputCloud;
+
     // simpleHighway(viewer);
-    cityBlock(viewer);
+    // cityBlock(viewer);
 
     while (!viewer->wasStopped ())
     {
+        // clear viewer
+        viewer->removeAllPointClouds();
+        viewer->removeAllShapes();
+
+        // load pcd and run obstacle detection process
+        pcl::PointCloud<pcl::PointXYZI>::Ptr inputCloudI = pointProcessorI->loadPcd((*streamIterator).string());
+        cityBlock(viewer, pointProcessorI, inputCloudI);
+
+        streamIterator++;
+        if(streamIterator == stream.end())
+            streamIterator = stream.begin();
+
         viewer->spinOnce ();
     } 
 }
