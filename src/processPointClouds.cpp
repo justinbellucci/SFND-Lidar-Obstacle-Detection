@@ -94,7 +94,7 @@ std::pair<typename pcl::PointCloud<PointT>::Ptr, typename pcl::PointCloud<PointT
     return segResult;
 }
 
-// TODO: RansacCustom
+// TODO: RANSAC algorithm 
 template<typename PointT>
 pcl::PointIndices::Ptr ProcessPointClouds<PointT>::Ransac3D(typename pcl::PointCloud<PointT>::Ptr cloud, int maxIterations, float distanceTolerance)
 {
@@ -150,7 +150,7 @@ pcl::PointIndices::Ptr ProcessPointClouds<PointT>::Ransac3D(typename pcl::PointC
         if(inliersSet.size() > inliersResult.size())
             inliersResult = inliersSet;
     }
-    
+
     // change format from unordered set to point indices format
     pcl::PointIndices::Ptr inliers {new pcl::PointIndices};
     for(const auto& item : inliersResult)
@@ -165,7 +165,7 @@ pcl::PointIndices::Ptr ProcessPointClouds<PointT>::Ransac3D(typename pcl::PointC
 	return inliers;
 }
 
-// TODO: SegmentPlaneCustom
+// TODO: Custom segment plane algorithm using RANSAC 
 template<typename PointT>
 std::pair<typename pcl::PointCloud<PointT>::Ptr, typename pcl::PointCloud<PointT>::Ptr> ProcessPointClouds<PointT>::SegmentPlaneCustom(typename pcl::PointCloud<PointT>::Ptr cloud, int maxIterations, float distanceThreshold)
 {
