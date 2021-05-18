@@ -48,14 +48,19 @@ void cityBlock(pcl::visualization::PCLVisualizer::Ptr& viewer, ProcessPointCloud
     pcl::PointCloud<pcl::PointXYZI>::Ptr filterCloud = pointProcessorI->FilterCloud(inputCloud, 0.2, Eigen::Vector4f(-20, -6, -10, 1), Eigen::Vector4f(20, 6, 10, 1));
     
     // segment cloud into road and obstacles
-    std::pair<pcl::PointCloud<pcl::PointXYZI>::Ptr, pcl::PointCloud<pcl::PointXYZI>::Ptr> segmentedCloudI = pointProcessorI->SegmentPlane(filterCloud, 100, 0.2);
-    
+    // std::pair<pcl::PointCloud<pcl::PointXYZI>::Ptr, pcl::PointCloud<pcl::PointXYZI>::Ptr> segmentedCloudI = pointProcessorI->SegmentPlane(filterCloud, 100, 0.2);
+    // TODO: SegmentPlane with custom RANSAC algorithm
+    std::pair<pcl::PointCloud<pcl::PointXYZI>::Ptr, pcl::PointCloud<pcl::PointXYZI>::Ptr> segmentedCloudI = pointProcessorI->SegmentPlaneCustom(filterCloud, 100, 0.2);
+
     // render segmented cloud
-    // renderPointCloud(viewer, inputCloud, "City block");
-    // renderPointCloud(viewer, filterCloud, "filterCloud");
+    // TODO: renderPointCloud with segmented cloud pair as input
     renderPointCloud(viewer, segmentedCloudI.second, "Road", Color(0,1,0));
     // renderPointCloud(viewer, segmentedCloudI.first, "Obstacles", Color(1, 0, 0));
+    
     // render the various clusters 
+    // TODO: custom Euclidean clustering with custom KdTree
+
+
     std::vector<pcl::PointCloud<pcl::PointXYZI>::Ptr> cloudClustersI = pointProcessorI->Clustering(segmentedCloudI.first, 0.6, 15, 1000);
     int clusterID = 0;
     std::vector<Color> colors = {Color(1,0,0), Color(1,1,0), Color(0,0,1)};

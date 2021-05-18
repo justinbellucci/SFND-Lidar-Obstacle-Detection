@@ -17,6 +17,7 @@
 #include <vector>
 #include <ctime>
 #include <chrono>
+#include <unordered_set>
 #include "render/box.h"
 
 template<typename PointT>
@@ -45,6 +46,12 @@ public:
     typename pcl::PointCloud<PointT>::Ptr loadPcd(std::string file);
 
     std::vector<boost::filesystem::path> streamPcd(std::string dataPath);
-  
+
+    // TODO: RansacCustom
+    pcl::PointIndices::Ptr Ransac3D(typename pcl::PointCloud<PointT>::Ptr cloud, int maxIterations, float distanceTolerance);
+
+    // TODO: SegmentPlaneCustom
+    std::pair<typename pcl::PointCloud<PointT>::Ptr, typename pcl::PointCloud<PointT>::Ptr> SegmentPlaneCustom(typename pcl::PointCloud<PointT>::Ptr cloud, int maxIterations, float distanceThreshold);
+
 };
 #endif /* PROCESSPOINTCLOUDS_H_ */
