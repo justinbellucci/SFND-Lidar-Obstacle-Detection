@@ -22,12 +22,12 @@ struct Node
 };
 
 // tree
-struct kdTree
+struct KdTree
 {
     // constructor
-    kdTree() : root(NULL){}
+    KdTree() : root(NULL){}
     // destructor
-    ~kdTree()
+    ~KdTree()
     {
         delete root;
     }

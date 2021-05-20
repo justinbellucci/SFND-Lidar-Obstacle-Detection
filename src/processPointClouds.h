@@ -19,6 +19,7 @@
 #include <chrono>
 #include <unordered_set>
 #include "render/box.h"
+#include "kdTree.h" 
 
 template<typename PointT>
 class ProcessPointClouds {
@@ -55,5 +56,8 @@ public:
 
     // TODO: ClusteringCustom
     std::vector<typename pcl::PointCloud<PointT>::Ptr> ClusteringCustom(typename pcl::PointCloud<PointT>::Ptr cloud, float clusterTolerance, int minSize, int maxSize);
+
+    // TODO: Custering helper function
+    void clusterProximity(int idx, typename pcl::PointCloud<PointT>::Ptr cloud, std::vector<int> &cluster, std::vector<bool> &isProcessed, KdTree* tree, float clusterTolerance);
 };
 #endif /* PROCESSPOINTCLOUDS_H_ */
