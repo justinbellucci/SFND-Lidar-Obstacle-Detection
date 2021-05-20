@@ -59,8 +59,6 @@ void cityBlock(pcl::visualization::PCLVisualizer::Ptr& viewer, ProcessPointCloud
     
     // render the various clusters 
     // TODO: custom Euclidean clustering with custom KdTree
-
-
     std::vector<pcl::PointCloud<pcl::PointXYZI>::Ptr> cloudClustersI = pointProcessorI->Clustering(segmentedCloudI.first, 0.6, 15, 1000);
     int clusterID = 0;
     std::vector<Color> colors = {Color(1,0,0), Color(1,1,0), Color(0,0,1)};

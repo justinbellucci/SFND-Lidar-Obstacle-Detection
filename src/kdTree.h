@@ -69,7 +69,7 @@ struct kdTree
     {
         if(*node != NULL)
         {
-            // check x, y, and z distances
+            // check x, y, and z and calculate distance from 
             if((*node)->point[0] >= (target[0] - distanceTolerance) && (*node)->point[0] <= (target[0] + distanceTolerance)
                 && (*node)->point[1] >= (target[1] - distanceTolerance) && (*node)->point[1] <= (target[1] + distanceTolerance)
                 && (*node)->point[2] >= (target[2] - distanceTolerance) && (*node)->point[2] <= (target[2] + distanceTolerance))
