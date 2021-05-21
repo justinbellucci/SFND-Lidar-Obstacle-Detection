@@ -151,7 +151,7 @@ int main (int argc, char** argv)
     // create point processor and respective pointer
     ProcessPointClouds<pcl::PointXYZI>* pointProcessorI = new ProcessPointClouds<pcl::PointXYZI>();
     // load data to stream
-    std::vector<boost::filesystem::path> stream = pointProcessorI->streamPcd("/Users/justinbellucci/GitHub/SFND-Lidar-Obstacle-Detection/src/sensors/data/pcd/data_1");
+    std::vector<boost::filesystem::path> stream = pointProcessorI->streamPcd("../src/sensors/data/pcd/data_1");
     auto streamIterator = stream.begin();
     pcl::PointCloud<pcl::PointXYZI>::Ptr inputCloud;
 
